@@ -31,8 +31,7 @@ pip install -r requirements.txt
 wget https://storage.googleapis.com/api-project-941639660937.appspot.com/tvtropes1_v.zip
 wget https://storage.googleapis.com/api-project-941639660937.appspot.com/tvtropesmodel_opt.zip
 # unpack the big files
-unzip tvtropes1_v.zip
-unzip tvtropesmodel_opt.zip
+unzip tvtropes1_v.zip &&  unzip tvtropesmodel_opt.zip
 ```
 
 # Run
