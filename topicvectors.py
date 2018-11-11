@@ -111,7 +111,7 @@ def train(docs, outf="model.bin"):
         epochs=iterations,
         alpha=alpha,
         min_alpha=min_alpha,
-        workers=3)
+        workers=8)
 
     model.build_vocab(documents)
     model.train(documents,
@@ -133,7 +133,7 @@ def train(docs, outf="model.bin"):
             correct += 1
         else:
             incorrect += 1
-    logging.info("performance: {}".format(correct*1.0/(correct + incorrect + 0.00001)))
+    logging.info("Training accuracy: {}".format(correct*1.0/(correct + incorrect + 0.00001)))
 
     # Track the performance on the test set
     test_correct = 0
@@ -141,10 +141,10 @@ def train(docs, outf="model.bin"):
     for i,t in enumerate(tqdm(testset)):
         (sims, w) = recall((model, trainset), t)
         if sims == t:
-            correct += 1
+            test_correct += 1
         else:
-            incorrect += 1
-    logging.info("test_performance: {}".format(test_correct*1.0/(test_correct + test_incorrect + 0.00001)))
+            test_incorrect += 1
+    logging.info("Test accuracy: {}".format(test_correct*1.0/(test_correct + test_incorrect + 0.00001)))
     # logging.info(t, "\n   closest is:\n", sims, "\n  dist:", w, "\n\n")
     return (model, trainset)
 

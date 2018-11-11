@@ -54,7 +54,6 @@ The storyteller is interactive, it understands the following commands:
 `next` uses the vector model from plottomodel.bin to find the next story beat based on the given cue text.
 Similarly, `hint` uses the tvtropesmodel.bin to find an appropriate trope.
 
-
 ## Basic Usage
 Improvisors on stage can cue the system to provide the next plot point or the next hint.
 The improvisors provide the dialogue for each plot clause.
