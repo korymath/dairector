@@ -1,6 +1,8 @@
 import sys
+import pdb
 import json
 import random
+import argparse
 
 
 class Modifier(object):
@@ -68,8 +70,8 @@ class NextStateModifier(Modifier):
     def __init__(self, next):
         self.next = next
         if not next:
-            import pdb
-            pdb.set_trace()
+            print('no next state to modify')
+            raise ValueError
         self.active = True
     def apply_successor(self, next):
         self.active = False
@@ -97,11 +99,13 @@ class ModifierManager(object):
         self.modifiers = []
         self.queue = []
         self.states = states
+
     def copy(self):
         result = ModifierManager(self.states)
         result.queue = self.queue[:]
         result.modifier = self.modifiers[:]
         return result
+
     def add(self, mod, doqueue=True, instate=""):
         #print "add", mod, self.queue, doqueue
         if self.queue and doqueue:
@@ -186,7 +190,7 @@ class ModifierManager(object):
                             print(parts)
                         self.modifiers.append(ChangeModifier(orig, repl))
                 elif len(mod.strip()) == 1:
-                    # stray a, b, c that doesn't exist 
+                    # stray a, b, c that doesn't exist
                     pass
                 elif mod == "**********":
                     # whatever that's supposed to be
@@ -214,13 +218,8 @@ class ModifierManager(object):
                     elif mod == 'change "married to" to "sweetheart of"':
                         self.modifiers.insert(0, ChangeModifier("married to", "sweetheart of"))
                     elif "or" in mod:
-                        # or 197 ch B to B-3 or 973
                         pass
-                    else:
-                        #print >>sys.stderr, "unknown modifier", mod, instate
-                        #import pdb
-                        #pdb.set_trace()
-                        pass
+
     def modify(self, text):
         newmods = []
         for m in self.modifiers:
@@ -254,12 +253,16 @@ class ModifierManager(object):
 def clean_tree(node):
     newchildren = []
     for n in node["children"]:
-        if n: 
+        if n:
             newchildren.append(n)
             clean_tree(n)
     node["children"] = newchildren
 
-def generate(fname, stats="", state="", termination_probability=0.01, termination_length=0, debug=False, loops=False, user_input=True, treef=""):
+def generate(fname, stats="", state="", termination_probability=0.01,
+    termination_length=0, debug=False, loops=False,
+    user_input=True, treef=""):
+    """Generation function."""
+
     deff = open(fname)
     termination_probability = float(termination_probability)
     if stats:
@@ -311,11 +314,13 @@ def generate(fname, stats="", state="", termination_probability=0.01, terminatio
                     found = True
         else:
             newtreestates = []
-            for (s,vis,mm,node) in treestates:
-                if s == "998":
-                    import pdb
-                    pdb.set_trace()
-                text, eligible, p = next_step(chain, s, mm, vis, loops, stats, debug)
+            for (s, vis, mm, node) in treestates:
+                # if s == "998":
+                    # print('s 998, error')
+                try:
+                    text, eligible, p = next_step(chain, s, mm, vis, loops, stats, debug)
+                except (UnboundLocalError, KeyError) as error:
+                    print('Error: {}'.format(error))
                 if not eligible:
                     break
                 node["text"] = text
@@ -327,14 +332,25 @@ def generate(fname, stats="", state="", termination_probability=0.01, terminatio
                     node["children"].append(newnode)
                     for s in p["successors"]:
                         if s["successor"] == e:
-                            newmm.add(s["modifier"], instate=s)
+                            try:
+                                newmm.add(s["modifier"], instate=s)
+                            except ValueError as error:
+                                print('Error: {}'.format(error))
+                                print(s)
                     newtreestates.append((e ,vis + [e],newmm,newnode))
             treestates = newtreestates
     if treef:
-        clean_tree(tree)
+        print('treef: {}'.format(treef))
+        if tree:
+            clean_tree(tree)
+        else:
+            print('No tree to clean.')
+            return False
+        # write the tree to a file
         f = file(treef, "w")
         json.dump(tree, f, indent=True)
         f.close()
+        return True
 
 def next_step(chain, state, modman, visited, loops, stats, debug=False):
     parts = chain["states"][state]
@@ -345,7 +361,7 @@ def next_step(chain, state, modman, visited, loops, stats, debug=False):
     for i,p in enumerate(parts[start:end]):
         if not stats:
             if debug:
-                print(state, i, end=' ') 
+                print(state, i, end=' ')
             text = modman.modify(p["text"])
         pass
     eligible = []
@@ -360,10 +376,17 @@ cnt = {}
 statecnt = 0
 
 
-def main(fname, repeats=1, stats="", state="", termination_probability=0.01, termination_length=0, debug=False, loops=False, user_input=True, tree=""):
+def main(fname, repeats=1, stats="", state="", termination_probability=0.01, termination_length=0, debug=False, loops=False, user_input=True, tree="", seed=1017):
     repeats = int(repeats)
     while repeats > 0:
-        generate(fname, stats, state, termination_probability, termination_length, debug, loops, user_input, tree)
+        try:
+            file_generated = generate(fname, stats, state, termination_probability, termination_length, debug, loops, user_input, tree)
+        except (IndexError, ValueError) as error:
+            random.seed(seed+random.randint(1, 1017))
+            file_generated = generate(fname, stats, state, termination_probability, termination_length, debug, loops, user_input, tree)
+        if not file_generated:
+            random.seed(seed+random.randint(1, 1017))
+            file_generated = generate(fname, stats, state, termination_probability, termination_length, debug, loops, user_input, tree)
         repeats -= 1
         if stats:
             print(".", end=' ')
@@ -386,7 +409,6 @@ def main(fname, repeats=1, stats="", state="", termination_probability=0.01, ter
         print("% Visited:", len(cnts)*1.0/statecnt, "(%d/%d)"%(len(cnts),statecnt))
 
 if __name__ == "__main__":
-    import argparse    
     parser = argparse.ArgumentParser(description='Generate a story from a Markov Chain description.')
     parser.add_argument('markovchain', help='The file describing the Markov Chain in JSON')
     parser.add_argument('--repeats', dest='repeats', type=int, default=1,
@@ -399,8 +421,25 @@ if __name__ == "__main__":
     parser.add_argument('--loops', '-l', dest="loops", action="store_true", help="Allow loops")
     parser.add_argument('--auto-mode', '-a', dest="user", action="store_false", help="Don't ask for user input")
     parser.add_argument('--tree', '-t', dest='tree', action="store", help="Generate a branching story and save it in the given tree file", default="")
+    parser.add_argument('--seed', dest='seed', action="store", help="random seed", type=int)
 
     args = parser.parse_args()
-    main(args.markovchain, repeats=args.repeats, stats=args.stats, state=args.state,
-        termination_probability=args.prob, termination_length=args.length,
-        debug=args.debug, loops=args.loops, user_input=args.user, tree=args.tree)
+
+    # Set the random seed from the parsed arugment
+    if args.seed:
+        random.seed(args.seed)
+    else:
+        args.seed = random.randint(1, 1017)
+        random.seed(args.seed)
+
+    main(args.markovchain,
+        repeats=args.repeats,
+        stats=args.stats,
+        state=args.state,
+        termination_probability=args.prob,
+        termination_length=args.length,
+        debug=args.debug,
+        loops=args.loops,
+        user_input=args.user,
+        tree=args.tree,
+        seed=args.seed)
