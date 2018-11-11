@@ -27,11 +27,10 @@ pip install -r requirements.txt
 # see https://stackoverflow.com/questions/33513522/when-installing-pyaudio-pip-cannot-find-portaudio-h-in-usr-local-include 
 # for more information
 # pip install --global-option='build_ext' --global-option='-I/Users/korymath/homebrew/Cellar/portaudio/19.6.0/include' --global-option='-L/Users/korymath/homebrew/Cellar/portaudio/19.6.0/lib' pyaudio
-# get the trained model files
-wget https://storage.googleapis.com/api-project-941639660937.appspot.com/tvtropes1_v.zip
-wget https://storage.googleapis.com/api-project-941639660937.appspot.com/tvtropesmodel_opt.zip
-# unpack the big files
-unzip tvtropes1_v.zip && unzip tvtropesmodel_opt.zip
+# get the trained model and example files
+wget https://storage.googleapis.com/api-project-941639660937.appspot.com/dairector_pretrained_examples.zip
+# unpack the files
+unzip dairector_pretrained_examples.zip
 ```
 
 # Run
@@ -39,22 +38,26 @@ unzip tvtropes1_v.zip && unzip tvtropesmodel_opt.zip
 ```sh
 # first ensure that your environment is activated
 source env/bin/activate
+# example 1a, generate a new subgraph from the entire plotto conflict graph
 python markovgenerator.py -t outputfile.json plottoconflicts.json
+# example 1b, interactive story telling using the plot subgraph and tv tropes hints
 python storyteller.py outputfile.json tvtropes.json tvtropesmodel.bin plottomodel.bin
-
-# The storyteller is interactive, it understands the following commands:
-# next [<cue>]
-# hint [<cue>]
-# quit
-# next uses the vector model from plottomodel.bin to find the next story beat based on the given cue, and hint uses the tvtropesmodel.bin to find an appropriate trope.
 ```
 
-## Basic Usage
-Two human improvisors are on stage and at several points during an improvised performance they can cue the system to provide the next plot point. Then they improvise the dialog for each plot clause.
+## Interactive Beat Generation
 
-1. A single Plotto plot chain is generated, from a given A and C we could find 3 paths through B clauses.
-2. Actors on stage are given the "next" beat of the story when they trigger the system.
-3. Actors can also trigger a relevant entry from TV Tropes.
+The storyteller is interactive, it understands the following commands:
+* next [<cue>]
+* hint [<cue>]
+* quit
+
+`next` uses the vector model from plottomodel.bin to find the next story beat based on the given cue text.
+Similarly, `hint` uses the tvtropesmodel.bin to find an appropriate trope.
+
+
+## Basic Usage
+Improvisors on stage can cue the system to provide the next plot point or the next hint.
+The improvisors provide the dialogue for each plot clause.
 
 ## Training a new model
 ```sh
