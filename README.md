@@ -1,37 +1,80 @@
-## Welcome to GitHub Pages
+# dAIrector: Automatic Story Beat Generation through Knowledge Synthesis
 
-You can use the [editor on GitHub](https://github.com/korymath/dairector/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+dAIrector is an automated director which collaborates with humans storytellers.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The system is based on work by Markus Eger [Plotter: Operationalizing the Master Book of All Plots](https://pdfs.semanticscholar.org/0c13/49ba53a155ca90dc6efe8ca3fe620fb50f88.pdf) and Kory Mathewson [Improvised Theatre Alongside Artificial Intelligences](https://aaai.org/ocs/index.php/AIIDE/AIIDE17/paper/view/15825).
 
-### Markdown
+This code accompanies the paper: [dAIrector: Automatic Story Beat Generation through Knowledge Synthesis](https://arxiv.org/abs/1811.03423) presented at Joint Workshop on Intelligent Narrative Technologies and Intelligent Cinematography and Editing at AAAI Conference on Artificial Intelligence and Interactive Digital Entertainment (AIIDE'18). Edmonton, Alberta, Canada.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+# Configure
 
-```markdown
-Syntax highlighted code block
+Cross-platform compatible, tested on Windows and Mac OSX High Sierra 10.13.2.
 
-# Header 1
-## Header 2
-### Header 3
+## Installation for OSX
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```sh
+# install homebrew
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# install and upgrade portaudio, swig, git, python3
+brew install --upgrade portaudio swig git python3
+# set up the python3 virtual environment
+virtualenv -p python3 env
+# activate the virtual environment
+source env/bin/activate
+# install requirements
+pip install -r requirements.txt
+# in case of an error with pyaudio, may need to point to brew intall directly
+# see https://stackoverflow.com/questions/33513522/when-installing-pyaudio-pip-cannot-find-portaudio-h-in-usr-local-include 
+# for more information
+# pip install --global-option='build_ext' --global-option='-I/Users/korymath/homebrew/Cellar/portaudio/19.6.0/include' --global-option='-L/Users/korymath/homebrew/Cellar/portaudio/19.6.0/lib' pyaudio
+# get the trained model files
+wget https://storage.googleapis.com/api-project-941639660937.appspot.com/tvtropes1_v.zip
+wget https://storage.googleapis.com/api-project-941639660937.appspot.com/tvtropesmodel_opt.zip
+# unpack the big files
+unzip tvtropes1_v.zip
+unzip tvtropesmodel_opt.zip
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+# Run
 
-### Jekyll Themes
+```sh
+# first ensure that your environment is activated
+source env/bin/activate
+python markovgenerator.py -t outputfile.json plottoconflicts.json
+python storyteller.py outputfile.json tvtropes.json tvtropesmodel.bin plottomodel.bin
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/korymath/dairector/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+# The storyteller is interactive, it understands the following commands:
+# next [<cue>]
+# hint [<cue>]
+# quit
+# next uses the vector model from plottomodel.bin to find the next story beat based on the given cue, and hint uses the tvtropesmodel.bin to find an appropriate trope.
+```
 
-### Support or Contact
+## Basic Usage
+Two human improvisors are on stage and at several points during an improvised performance they can cue the system to provide the next plot point. Then they improvise the dialog for each plot clause.
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+1. A single Plotto plot chain is generated, from a given A and C we could find 3 paths through B clauses.
+2. Actors on stage are given the "next" beat of the story when they trigger the system.
+3. Actors can also trigger a relevant entry from TV Tropes.
+
+## Training a new model
+```sh
+python topicvectors.py tvtropesmodel.bin tvtropes.json
+```
+
+## Documentation
+Go to [https://korymath.github.io/dairector/](https://korymath.github.io/dairector/)
+
+## Cite
+
+```sh
+@inproceedings{eger2018dairector,
+  author = {{Eger}, M. and {Mathewson}, K.~W.},
+  title = "{dAIrector: Automatic Story Beat Generation through Knowledge Synthesis}",
+  booktitle = {AAAI Conference on Artificial Intelligence and Interactive Digital Entertainment (AIIDE18), Joint Workshop on Intelligent Narrative Technologies and Intelligent Cinematography and Editing},
+  publisher = {AAAI},
+  year = 2018,
+  address={Edmonton, Alberta, Canada},
+  month = 10,
+}
+```
