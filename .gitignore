@@ -6,6 +6,8 @@ tvtropes1_v.json
 tvtropes1_v.zip.1
 tvtropesmodel_opt.bin
 *.zip
+*.bin
+*.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
