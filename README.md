@@ -43,7 +43,7 @@ python storyteller.py outputfile.json tvtropes.json tvtropesmodel.bin plottomode
 
 The storyteller is interactive, it understands the following commands:
 * next [*cue_text*]
-* hint [*cue*]
+* hint [*cue_text*]
 * quit
 
 `next` uses the vector model from `plottomodel.bin` to find the next story beat based on the given cue text.
