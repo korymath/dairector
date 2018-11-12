@@ -10,11 +10,7 @@ This code accompanies the paper: [dAIrector: Automatic Story Beat Generation thr
 Through the collaboration of humand and machine, complex stories can be constructed. While generating plots automatically is interesting, I think that the humans can work to justify and contextualize those plots, to poke fun and evaluate, and to be inspired by the system. Improvisational theatre is an extemporaneous form of theatre where there is no rehearsal and the script is not prepared ahead of time. The art depends on entropy and the justification of the randomness.
 
 dAIrector is used to create stories. These stories are represented as linked clauses.
-
 ![Clause Flow](images/clause-flow.png)
-
-<!-- The human performers use their knowledge of general story shapes, as summarized in the following figure: -->
-<!-- ![Story Shapes](images/story-shapes.jpg). -->
 
 ## Example Usage
 
@@ -35,14 +31,15 @@ The following is a more fleshed out conceptualization of how the system may work
 ## Expanding the B CLAUSES:
 * A revenges himself upon an enemy, A-3
 * A, in order to be revenged upon his enemy, A-3, manufactures an infernal machine, X
-A, influenced by a compelling idea of responsibility, finds it necessary to protect his friend, A-2, from a secret danger
-A, suspected of treachery by his friend, A-2, in a daring rescue saves the property and perhaps the life of A-2, and proves his faithfulness by a revelation of the danger to which A-2, unknown to himself, was exposed
-A seeks to correct a character weakness in his friend, A-2
+* A, influenced by a compelling idea of responsibility, finds it necessary to protect his friend, A-2, from a secret danger
+* A, suspected of treachery by his friend, A-2, in a daring rescue saves the property and perhaps the life of A-2, and proves his faithfulness by a revelation of the danger to which A-2, unknown to himself, was exposed
+* A seeks to correct a character weakness in his friend, A-2
+
 ## Replacing the Character Symbols:
-A: male protagonist (name generated: Joey)
-A-3: male rival or enemy of A (name generated: Mr. Kyle)
-A-2: male friend of A (name generated: Tynan)
-X: an inanimate object, an object of mystery, an uncertain quantity (name generated: BLOB)
+* A: male protagonist (name generated: Joey)
+* A-3: male rival or enemy of A (name generated: Mr. Kyle)
+* A-2: male friend of A (name generated: Tynan)
+* X: an inanimate object, an object of mystery, an uncertain quantity (name generated: BLOB)
 
 ## Full story with names and story structure (Scene indicates when human/AI improvisors might improvise dialog)
 1. Joey is a person influenced by an obligation, he falls into misfortune through mistaken judgement.
@@ -52,7 +49,9 @@ X: an inanimate object, an object of mystery, an uncertain quantity (name genera
 5. Joey seeks to correct a character weakness in his friend, Tynan.
 6. Joey achieves success and happiness in a hard undertaking.
 
-A beautiful five-act play that is well structured with a beginning, middle, and end. Now is where it gets interesting.
+A beautiful five-act play that is well structured with a beginning, middle, and end. 
+
+Now is where it gets interesting....
 
 Scenes require something interesting to happen. In addition to the context of the scene, the dialog from the human/AI improvisors, we might want a plot device. For instance, in Scene 3, the "secret danger" is vague. Searching "secret danger" in the TV Tropes database, reveals that the phrase is associated with the game [Jewel Quest](http://tvtropes.org/pmwiki/pmwiki.php/VideoGame/JewelQuest). This secret danger is associated with a Trope: [IT BELONGS IN A MUSEUM](http://tvtropes.org/pmwiki/pmwiki.php/Main/ItBelongsInAMuseum)
 Thus Scene 3 becomes more contextualized:
