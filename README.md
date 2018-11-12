@@ -1,16 +1,11 @@
-# dAIrector: Automatic Story Beat Generation through Knowledge Synthesis
+# dAIrector
 
 dAIrector is an automated director which collaborates with humans storytellers.
 
-The system is based on work by Markus Eger [Plotter: Operationalizing the Master Book of All Plots](https://pdfs.semanticscholar.org/0c13/49ba53a155ca90dc6efe8ca3fe620fb50f88.pdf) and Kory Mathewson [Improvised Theatre Alongside Artificial Intelligences](https://aaai.org/ocs/index.php/AIIDE/AIIDE17/paper/view/15825).
+## Documentation
+Go to [https://korymath.github.io/dairector/](https://korymath.github.io/dairector/)
 
-This code accompanies the paper: [dAIrector: Automatic Story Beat Generation through Knowledge Synthesis](https://arxiv.org/abs/1811.03423) presented at Joint Workshop on Intelligent Narrative Technologies and Intelligent Cinematography and Editing at AAAI Conference on Artificial Intelligence and Interactive Digital Entertainment (AIIDE'18). Edmonton, Alberta, Canada.
-
-# Configure
-
-Cross-platform compatible, tested on Windows and Mac OSX High Sierra 10.13.2.
-
-## Installation for OSX
+## Set Up
 
 ```sh
 # install homebrew
@@ -47,12 +42,13 @@ python storyteller.py outputfile.json tvtropes.json tvtropesmodel.bin plottomode
 ## Interactive Beat Generation
 
 The storyteller is interactive, it understands the following commands:
-* next [<cue>]
-* hint [<cue>]
+* next [*cue_text*]
+* hint [*cue*]
 * quit
 
-`next` uses the vector model from plottomodel.bin to find the next story beat based on the given cue text.
-Similarly, `hint` uses the tvtropesmodel.bin to find an appropriate trope.
+`next` uses the vector model from `plottomodel.bin` to find the next story beat based on the given cue text.
+
+`hint` uses the `tvtropesmodel.bin` to find an appropriate trope.
 
 ## Basic Usage
 Improvisors on stage can cue the system to provide the next plot point or the next hint.
@@ -62,9 +58,6 @@ The improvisors provide the dialogue for each plot clause.
 ```sh
 python topicvectors.py tvtropesmodel.bin tvtropes.json
 ```
-
-## Documentation
-Go to [https://korymath.github.io/dairector/](https://korymath.github.io/dairector/)
 
 ## Cite
 
