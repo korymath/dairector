@@ -35,6 +35,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             sudo apt-get install swig
+            sudo apt-get install libasyncns0 libdbus-1-3 libjson-c2 libsndfile1 libwrap0 libxtst6
             sudo apt-get install libpulse0
             sudo apt-get install libpulse-mainloop-glib0
             sudo apt-get install libpulse-dev
