@@ -21,7 +21,7 @@ source env/bin/activate
 # install requirements
 pip install -r requirements.txt
 # in case of an error with pyaudio, may need to point to brew intall directly
-# see https://stackoverflow.com/questions/33513522/when-installing-pyaudio-pip-cannot-find-portaudio-h-in-usr-local-include 
+# see https://stackoverflow.com/questions/33513522/when-installing-pyaudio-pip-cannot-find-portaudio-h-in-usr-local-include
 # for more information
 # pip install --global-option='build_ext' --global-option='-I/Users/korymath/homebrew/Cellar/portaudio/19.6.0/include' --global-option='-L/Users/korymath/homebrew/Cellar/portaudio/19.6.0/lib' pyaudio
 # get the trained model and example files
@@ -51,6 +51,12 @@ The storyteller is interactive, it understands the following commands:
 `next` uses the vector model from `plottomodel.bin` to find the next story beat based on the given cue text.
 
 `hint` uses the `tvtropesmodel.bin` to find an appropriate trope.
+
+## Install pocketsphinx
+
+```sh
+pip install pocketsphinx==0.1.15
+```
 
 ## Basic Usage
 Improvisors on stage can cue the system to provide the next plot point or the next hint.

@@ -13,7 +13,6 @@ jmespath==0.9.3
 more-itertools==4.3.0
 numpy==1.15.4
 pluggy==0.8.0
-pocketsphinx==0.1.15
 py==1.7.0
 PyAudio==0.2.11
 pytest==3.10.1
