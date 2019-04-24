@@ -27,6 +27,8 @@ jobs:
               echo "Acquire::Check-Valid-Until false;" | sudo tee -a /etc/apt/apt.conf.d/10-nocheckvalid
               echo 'Package: *\nPin: origin "archive.debian.org"\nPin-Priority: 500' | sudo tee -a /etc/apt/preferences.d/10-archive-pin
               sudo apt-get update
+              sudo apt-get upgrade
+              sudo apt-get build-dep build-essential
 
       - run:
           name: install dependencies
@@ -34,12 +36,14 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             sudo apt-get install swig
+            sudo apt-get install libpulse0
             sudo apt-get install libpulse-mainloop-glib0
             sudo apt-get install libpulse-dev
             sudo apt-get install libasound2-dev
             sudo apt-get install python-pyaudio
             sudo apt-get install libjack-jackd2-dev
             sudo apt-get install libasound-dev portaudio19-dev libportaudio2 libportaudiocpp0 libav-tools
+            sudo apt-get install -f
             pip install -r requirements.txt
 
       - save_cache:
