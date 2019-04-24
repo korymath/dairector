@@ -56,6 +56,7 @@ The storyteller is interactive, it understands the following commands:
 
 ```sh
 pip install pocketsphinx==0.1.15
+pip install PyAudio==0.2.11
 ```
 
 ## Basic Usage

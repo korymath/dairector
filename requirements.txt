@@ -14,7 +14,6 @@ more-itertools==4.3.0
 numpy==1.15.4
 pluggy==0.8.0
 py==1.7.0
-PyAudio==0.2.11
 pytest==3.10.1
 python-dateutil==2.7.5
 requests==2.20.1
