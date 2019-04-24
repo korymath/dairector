@@ -28,7 +28,6 @@ jobs:
               echo 'Package: *\nPin: origin "archive.debian.org"\nPin-Priority: 500' | sudo tee -a /etc/apt/preferences.d/10-archive-pin
               sudo apt-get update
               sudo apt-get upgrade
-              sudo apt-get build-dep build-essential
 
       - run:
           name: install dependencies
